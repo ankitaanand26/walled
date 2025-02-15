@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
+import Logo from '../components/Logo'
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      <Logo/>
       <Text style={styles.title}>Welcome to WallEd</Text>
 
       <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={setEmail} />
@@ -41,3 +43,4 @@ const styles = StyleSheet.create({
   buttonText: { color: '#455763', fontWeight: 'bold' },
   signUpText: { marginTop: 10, color: '#455763' },
 });
+
