@@ -1,60 +1,24 @@
-import { Text, type TextProps, StyleSheet } from 'react-native';
+import { Text, TextProps, TextStyle } from "react-native";
+import { useColorScheme } from "react-native";
 
-import { useThemeColor } from '@/hooks/useThemeColor';
-
-export type ThemedTextProps = TextProps & {
-  lightColor?: string;
-  darkColor?: string;
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
+type ThemedTextProps = TextProps & {
+  type?: "title" | "body" | "link";
+  style?: TextStyle | TextStyle[];  
 };
 
-export function ThemedText({
-  style,
-  lightColor,
-  darkColor,
-  type = 'default',
-  ...rest
-}: ThemedTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+export function ThemedText({ type = "body", style, ...rest }: ThemedTextProps) {
+  const theme = useColorScheme();
+  
+  const getTextStyle = (): TextStyle => {
+    switch (type) {
+      case "title":
+        return { fontSize: 24, fontWeight: "bold" };
+      case "link":
+        return { color: theme === "dark" ? "#4DA6FF" : "#007AFF" };
+      default:
+        return { fontSize: 16 };
+    }
+  };
 
-  return (
-    <Text
-      style={[
-        { color },
-        type === 'default' ? styles.default : undefined,
-        type === 'title' ? styles.title : undefined,
-        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
-        type === 'subtitle' ? styles.subtitle : undefined,
-        type === 'link' ? styles.link : undefined,
-        style,
-      ]}
-      {...rest}
-    />
-  );
+  return <Text style={[getTextStyle(), ...(Array.isArray(style) ? style : [style])]} {...rest} />;
 }
-
-const styles = StyleSheet.create({
-  default: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  link: {
-    lineHeight: 30,
-    fontSize: 16,
-    color: '#0a7ea4',
-  },
-});
